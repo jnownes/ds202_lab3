@@ -1,0 +1,22 @@
+---
+title: "team.Rmd"
+author: "John Nownes and Sonia Thomas"
+date: "2/19/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. How does the happiness of a respondent relate to the marriage status?
+
+1. Does the sex of the respondent affect the relationship you found in Q1?
+
+1. How does the happiness of a respondent relate to the political party affiliation?
+
+1. Raise four questions that can be answered by the GSS dataset. Extract appropriate data from the website, explore, and answer the questions.
+    * 
+    * 
+    *
+    * 
