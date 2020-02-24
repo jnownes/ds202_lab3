@@ -1,0 +1,32 @@
+---
+title: "individual2"
+author: "Sonia Thomas"
+date: "2/24/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Individual 2
+
+#Lab3
+
+#Question 1
+```{r}
+dat<- readxl::read_xls('GSS.xls')
+dat
+names(dat)<- c('year', 'id', 'marital', 'sex', 'party', 'happiness', 'ballot')
+head(dat)
+ 
+dat$marital <- as.factor(dat$marital)
+str(dat)
+dat$
+
+newdat<- dat[dat$marital != 'No answer' & dat$marital != 'NA', ]
+newdat
+ggplot(newdat, aes(x=marital, fill=happiness)) + geom_bar() + xlab('Marital Status') + ylab('Count')
+
+```
+
