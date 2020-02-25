@@ -40,9 +40,27 @@ ggplot(dat1, aes(x= marital, fill = happiness)) + geom_bar() + xlab("Marital Sta
     Looking at the above plot, which breaks down the relationship between sex, marital status, and happiness, we can see that overall the sex of the respondent does not affect the relationship we found in question 1. This can be seen by noticing the similarity of bar heights (happiness levels) between each sex in each marital category subplot. For example, in the "Married" subplot, there is no difference between the male happiness levels and the female happiness levels. The only marital status where there appears to be even a minor difference in each sex's happiness level is the "Widowed" category. While there are many more widowed females than widowed males, we can still see that proportionally, there are many more "Very happy" and "Pretty happy" widowed females than there are "Very happy" and "Pretty happy" widowed males.
     
 1. How does the happiness of a respondent relate to the political party affiliation?
+    ```{r, fig.width = 10}
+    dat3<- dat[dat$party != "Don't know" & dat$party != "No answer" & dat$party != "Other party", ]
+dat3 <- na.omit(dat3)
+
+levels(dat3$party)<- c("Don't know", "Weak Democrat", "Weak Republican", "Independent", "No answer", "Democrat", "Republican", "Other Party", "Strong Democrat", "Strong Republican")
+levels(dat3$party)
+
+dat3 <- dat3[dat3$happiness == "Not too happy" | dat3$happiness == "Pretty happy" | dat3$happiness == "Very happy",]
+
+dat3$party <- factor(dat3$party, levels = c("Strong Democrat", "Democrat", "Weak Democrat", "Independent", "Weak Republican", "Republican", "Strong Republican", "Other Party"))
+
+
+ggplot(dat3, aes(x= party, fill = happiness)) + geom_bar(position = 'dodge') + xlab("Political Party") + ylab("Count") + ggtitle("Relationship between Happiness and Political party") + scale_fill_discrete(name = "Happiness")
+    ```
+    
+    Based on the output above we noticed that the relationship between happiness and political isn't very clear. You can see that each politcal party and the amount of responses for that party seen to be porpotional to each other the each level of happiness observed. The only party that seems stand out from the others based on the level of happiness is Strong Republican since they have almost the same level of Pretty happy and Very happy. Overall we conclude there is no obvious relationship between happiness and political party.
+
+
 
 1. Raise four questions that can be answered by the GSS dataset. Extract appropriate data from the website, explore, and answer the questions.
-    * 
-    * 
-    *
-    * 
+    * What year seems to have the most happiest and least happiest respondents?
+    * How does the number of hours worked per week affect happiness?
+    * What is the relationship between income and highest year of school completed?
+    * What is the relationship between age of respondent and the amount of hours worked? 
