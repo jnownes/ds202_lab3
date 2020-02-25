@@ -60,7 +60,26 @@ ggplot(dat3, aes(x= party, fill = happiness)) + geom_bar(position = 'dodge') + x
 
 
 1. Raise four questions that can be answered by the GSS dataset. Extract appropriate data from the website, explore, and answer the questions.
-    * What year seems to have the most happiest and least happiest respondents?
-    * How does the number of hours worked per week affect happiness?
+    * What year seems to have the happiest and least happiest respondents?
+    * How does the age of the respondent affect happiness?
     * What is the relationship between income and highest year of school completed?
-    * What is the relationship between age of respondent and the amount of hours worked? 
+    ```{r}
+dat4c<- dat[dat$income != "Don't know" & dat$income != "No answer" & dat$income != "Not applicable" & dat$income != "Refused", ]
+dat4c<- dat4c[dat4c$education != "Don't know" & dat4c$education != "No answer", ]
+
+labels<- paste(sort(as.integer(levels(dat4c$education))))
+print(labels)
+
+dat4c$education = factor(dat4c$education, levels = labels)
+
+
+dat4c<- dat4c[dat4c$education != "0" & dat4c$education != "1" & dat4c$education != "2" & dat4c$education != "3" & dat4c$education != "4", ]
+
+dat4c <- na.omit(dat4c)
+
+ggplot(dat4c, aes(x= income, fill = education)) + geom_bar() + xlab("Income") + ylab("Count") + ggtitle("Relationship between Education Level and Income") + scale_fill_discrete(name = "Education Level")
+    
+    
+    
+    ```
+    * How does the age of each respondent affect what political party they are in?
