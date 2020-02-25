@@ -13,12 +13,11 @@ library(ggplot2)
 1. How does the happiness of a respondent relate to the marriage status?
     ```{r}
     dat <- readxl::read_xls('GSS.xls')
-names(dat) = c('Year', 'id','marital','sex','party','happiness','ballot')
+names(dat) = c('Year', 'party', 'income', 'sex', 'education', 'age', 'marital', 'work hrs', 'id', 'happiness')
 dat$marital = as.factor(dat$marital)
 dat$sex = as.factor(dat$sex)
 dat$party = as.factor(dat$party)
 dat$happiness = as.factor(dat$happiness)
-dat$ballot = as.factor(dat$ballot)
 
 dat1 = dat[dat$marital != "No answer",]
 dat1 = dat1[dat1$happiness == "Not too happy" | dat1$happiness == "Pretty happy" | dat1$happiness == "Very happy",]
@@ -33,7 +32,8 @@ ggplot(dat1, aes(x= marital, fill = happiness)) + geom_bar() + xlab("Marital Sta
 
 1. Does the sex of the respondent affect the relationship you found in Q1?
     ```{r}
-    dat2 = dat1
+    #dat2 = dat1
+    dat2<- data.frame(dat1)
     ggplot(dat2, aes(x = sex, fill = happiness)) + geom_bar(position = 'dodge') + facet_wrap(~marital)
     ```
 
