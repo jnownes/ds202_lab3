@@ -7,12 +7,38 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
 ```
 
 1. How does the happiness of a respondent relate to the marriage status?
+    ```{r}
+    dat <- readxl::read_xls('GSS.xls')
+names(dat) = c('Year', 'id','marital','sex','party','happiness','ballot')
+dat$marital = as.factor(dat$marital)
+dat$sex = as.factor(dat$sex)
+dat$party = as.factor(dat$party)
+dat$happiness = as.factor(dat$happiness)
+dat$ballot = as.factor(dat$ballot)
+
+dat1 = dat[dat$marital != "No answer",]
+dat1 = dat1[dat1$happiness == "Not too happy" | dat1$happiness == "Pretty happy" | dat1$happiness == "Very happy",]
+dat1 = na.omit(dat1)
+dat1$marital = factor(dat1$marital, levels = c("Married", "Never married", "Divorced", "Widowed", "Separated"))
+
+ggplot(dat1, aes(x= marital, fill = happiness)) + geom_bar() + xlab("Marital Status") + ylab("Count") + ggtitle("Relationship between Happiness and Marital Status")
+    ```
+
+    Looking at the above bar plot, we can see that the proportions of each happiness level on each marital category remain constant. In other words, there is a appoximately the same percentage of Not too happy people in every marital category. The one outlier of this relationship is the number of Very happy who are married. Compared to the other marital categories, there is a much higher percentage of Very happy people who fall under the Married category.
+    We made the above plot after first removing values of happiness and marital status that did not specify anything, such as "Don't know" and "No answer."
 
 1. Does the sex of the respondent affect the relationship you found in Q1?
+    ```{r}
+    dat2 = dat1
+    ggplot(dat2, aes(x = sex, fill = happiness)) + geom_bar(position = 'dodge') + facet_wrap(~marital)
+    ```
 
+    Looking at the above plot, which breaks down the relationship between sex, marital status, and happiness, we can see that overall the sex of the respondent does not affect the relationship we found in question 1. This can be seen by noticing the similarity of bar heights (happiness levels) between each sex in each marital category subplot. For example, in the "Married" subplot, there is no difference between the male happiness levels and the female happiness levels. The only marital status where there appears to be even a minor difference in each sex's happiness level is the "Widowed" category. While there are many more widowed females than widowed males, we can still see that proportionally, there are many more "Very happy" and "Pretty happy" widowed females than there are "Very happy" and "Pretty happy" widowed males.
+    
 1. How does the happiness of a respondent relate to the political party affiliation?
 
 1. Raise four questions that can be answered by the GSS dataset. Extract appropriate data from the website, explore, and answer the questions.
