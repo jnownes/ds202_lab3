@@ -83,7 +83,8 @@ dat4c <- na.omit(dat4c)
 ggplot(dat4c, aes(x= income, fill = education)) + geom_bar() + xlab("Income") + ylab("Count") + ggtitle("Relationship between Education Level and Income") + scale_fill_discrete(name = "Education Level")
     
     ```
-   Based on the output I think it is safe to say that most respondents have an income of $25,000 or more. The education level of those respondents seem to mostly be around 11-15 so about right in the middle of the education level.  
+   
+   Based on the output we think it is safe to say that most respondents have an income of $25,000 or more. The education level of those respondents seem to mostly be around 11-15 so about right in the middle of the education level. It also seems like for all other incomes less than $25,000 most education levels of those respondents are around 11 to 12. Also its good to point out that there is a lot more variablility of education level of the respondents who have an income of $25,000 or more. Overall there doesn't seems to be an obvious distinction between income and education level since most seem to be around the level of 11 to 13. 
    
     * How does the age of each respondent affect what political party they are in?
     ```{r, fig.width = 13, fig.height= 10}
@@ -99,3 +100,4 @@ dat4d$party <- factor(dat4d$party, levels = c("Strong Democrat", "Democrat", "We
 ggplot(dat4d, aes(x= party, fill = age)) + geom_bar() + xlab("Political Party") + ylab("Count") + ggtitle("Relationship between age of respondent and political party") + scale_fill_discrete(name = "Education Level")
     
     ```
+  Based on the output above the age seems to be evenly distributed throught each political party. There doesn't seem to be a quite office realtionship age and political party.  
