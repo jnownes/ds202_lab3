@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 library(ggplot2)
 ```
 
@@ -35,9 +35,8 @@ ggplot(dat1, aes(x= marital, fill = happiness)) + geom_bar() + xlab("Marital Sta
 
 1. Does the sex of the respondent affect the relationship you found in Q1?
     ```{r}
-    #dat2 = dat1
     dat2<- data.frame(dat1)
-    ggplot(dat2, aes(x = sex, fill = happiness)) + geom_bar(position = 'dodge') + facet_wrap(~marital)
+    ggplot(dat2, aes(x = sex, fill = happiness)) + geom_bar(position = 'dodge') + facet_wrap(~marital, ncol = 5)
     ```
 
     Looking at the above plot, which breaks down the relationship between sex, marital status, and happiness, we can see that overall the sex of the respondent does not affect the relationship we found in question 1. This can be seen by noticing the similarity of bar heights (happiness levels) between each sex in each marital category subplot. For example, in the "Married" subplot, there is no difference between the male happiness levels and the female happiness levels. The only marital status where there appears to be even a minor difference in each sex's happiness level is the "Widowed" category. While there are many more widowed females than widowed males, we can still see that proportionally, there are many more "Very happy" and "Pretty happy" widowed females than there are "Very happy" and "Pretty happy" widowed males.
@@ -48,7 +47,6 @@ ggplot(dat1, aes(x= marital, fill = happiness)) + geom_bar() + xlab("Marital Sta
 dat3 <- na.omit(dat3)
 
 levels(dat3$party)<- c("Don't know", "Weak Democrat", "Weak Republican", "Independent", "No answer", "Democrat", "Republican", "Other Party", "Strong Democrat", "Strong Republican")
-levels(dat3$party)
 
 dat3 <- dat3[dat3$happiness == "Not too happy" | dat3$happiness == "Pretty happy" | dat3$happiness == "Very happy",]
 
@@ -63,41 +61,51 @@ ggplot(dat3, aes(x= party, fill = happiness)) + geom_bar(position = 'dodge') + x
 
 
 1. Raise four questions that can be answered by the GSS dataset. Extract appropriate data from the website, explore, and answer the questions.
-    * What year seems to have the happiest and least happiest respondents?
-    * How does the age of the respondent affect happiness?
-    * What is the relationship between income and highest year of school completed?
-    ```{r, fig.width=17, fig.height=10}
-dat4c<- dat[dat$income != "Don't know" & dat$income != "No answer" & dat$income != "Not applicable" & dat$income != "Refused", ]
-dat4c<- dat4c[dat4c$education != "Don't know" & dat4c$education != "No answer", ]
 
-labels<- paste(sort(as.integer(levels(dat4c$education))))
-print(labels)
-
-dat4c$education = factor(dat4c$education, levels = labels)
-
-
-dat4c<- dat4c[dat4c$education != "0" & dat4c$education != "1" & dat4c$education != "2" & dat4c$education != "3" & dat4c$education != "4", ]
-
-dat4c <- na.omit(dat4c)
-
-ggplot(dat4c, aes(x= income, fill = education)) + geom_bar() + xlab("Income") + ylab("Count") + ggtitle("Relationship between Education Level and Income") + scale_fill_discrete(name = "Education Level")
-    
+    a. What year seems to have the happiest and least happiest respondents?
+    ```{r}
+    dat4a = data.frame(dat)
+    dat4a = dat4a[dat4a$happiness == "Not too happy" | dat4a$happiness == "Pretty happy" | dat4a$happiness == "Very happy",]
+    dat4a = na.omit(dat4a)
+    ggplot(dat4a, aes(x= Year, fill = happiness)) + geom_bar() + ylab("Count") + ggtitle("Relationship between Happiness and Year") + scale_fill_discrete(name = "Happiness")
     ```
-   
-   Based on the output we think it is safe to say that most respondents have an income of $25,000 or more. The education level of those respondents seem to mostly be around 11-15 so about right in the middle of the education level. It also seems like for all other incomes less than $25,000 most education levels of those respondents are around 11 to 12. Also its good to point out that there is a lot more variablility of education level of the respondents who have an income of $25,000 or more. Overall there doesn't seems to be an obvious distinction between income and education level since most seem to be around the level of 11 to 13. 
-   
-    * How does the age of each respondent affect what political party they are in?
-    ```{r, fig.width = 13, fig.height= 10}
-  dat4d<- dat[dat$party != "Don't know" & dat$party != "No answer" & dat$party != "Other party", ]
-dat4d<- dat4d[dat4d$age != "Don't know" & dat4d$age != "No answer", ]
-dat4d <- na.omit(dat4d)
-
-levels(dat4d$party)<- c("Don't know", "Weak Democrat", "Weak Republican", "Independent", "No answer", "Democrat", "Republican", "Other Party", "Strong Democrat", "Strong Republican")
-levels(dat4d$party)
-dat4d$party <- factor(dat4d$party, levels = c("Strong Democrat", "Democrat", "Weak Democrat", "Independent", "Weak Republican", "Republican", "Strong Republican"))
-
-
-ggplot(dat4d, aes(x= party, fill = age)) + geom_bar() + xlab("Political Party") + ylab("Count") + ggtitle("Relationship between age of respondent and political party") + scale_fill_discrete(name = "Education Level")
     
+      * Looking at the above plot, we see that while the count of responents increased significantly after 1991, the overall proportions of each happiness level seems to remain pretty constant throughout the years. We notice though that the number of "Very happy" respondents decreased by a factor of 1/2 in the mid-2000's. Overall we can conclude that there is no obvious relationships between the year and the happiness of the respondents. <br><br>
+      
+    b. How does the age of the respondent affect happiness?
+    ```{r}
+    dat4b = data.frame(dat)
+    dat4b$age = as.numeric(dat4b$age)
+    dat4b = dat4b[dat4b$happiness == "Not too happy" | dat4b$happiness == "Pretty happy" | dat4b$happiness == "Very happy",]
+    dat4b = na.omit(dat4b)
+    ggplot(dat4b, aes(x= age)) + geom_histogram() + facet_wrap(~happiness) + ggtitle("Relationship between Happiness and Age")
     ```
-  Based on the output above the age seems to be evenly distributed throught each political party. There doesn't seem to be a quite office realtionship age and political party.  
+    
+      * Looking at the above plot that shows three histograms side-by-side of the the distribution of ages in each of the three categories of happiness ("Not too happy", "Pretty happy", and "Very happy"), we see that the "Pretty happy" respondents are by far the most left-skewed histogram, which corresponds to younger ages. Out of the "Pretty happy" respondents, their ages hit a maximum count in their teens and early twenties before number of "Very happy" respondents' ages fall steadily as they get older. The "Not too happy" people are much more evenly distributed with respect to their ages, while the "Very happy" people have a moderate left-skewed distribution.  <br><br>
+    
+    c. What is the relationship between income and highest year of school completed?
+    ```{r}
+    dat4c = data.frame(dat)
+    dat4c<- dat4c[dat4c$income == "$10000 - 14999" | dat4c$income == "$15000 - 19999" | dat4c$income == "$20000 - 24999" | dat4c$income == "$25000 or more", ]
+    dat4c<- dat4c[dat4c$education != "Don't know" & dat4c$education != "No answer", ]
+    dat4c$education = as.factor(dat4c$education)
+    labels<- paste(sort(as.integer(levels(dat4c$education))))
+    dat4c$education = factor(dat4c$education, levels = labels)
+    dat4c<- dat4c[dat4c$education != "0" & dat4c$education != "1" & dat4c$education != "2" & dat4c$education != "3" & dat4c$education != "4", ]
+    dat4c <- na.omit(dat4c)
+    ggplot(dat4c, aes(x= education, fill = education)) + geom_bar() + facet_grid(~income) + theme(axis.text.x=element_blank(), axis.ticks.x=element_blank()) + xlab("Income level") + ylab("Count") + ggtitle("Relationship between Education Level and Income") + scale_fill_discrete(name = "Highest Year\nin School\nCompleted")
+    ```
+    
+      * Based on the output we think it is safe to say that most respondents have an income of $25,000 or more. The education level of those respondents seem to mostly be around 11-15 so about right in the middle of the education level. It also seems like for all other incomes less than $25,000 most education levels of those respondents are around 11 to 12. Also its good to point out that there is a lot more variablility of education level of the respondents who have an income of $25,000 or more. Overall there doesn't seems to be an obvious distinction between income and education level since most seem to be around the level of 11 to 13. <br><br> 
+      
+    d. How does the age of each respondent affect what political party they are in?
+    ```{r, fig.width = 10, fig.height= 10}
+    dat4d<- dat[dat$party != "Don't know" & dat$party != "No answer" & dat$party != "Other party", ]
+    dat4d<- dat4d[dat4d$age != "Don't know" & dat4d$age != "No answer", ]
+    dat4d <- na.omit(dat4d)
+    levels(dat4d$party)<- c("Don't know", "Weak Democrat", "Weak Republican", "Independent", "No answer", "Democrat", "Republican", "Other Party", "Strong Democrat", "Strong Republican")
+    dat4d$party <- factor(dat4d$party, levels = c("Strong Democrat", "Democrat", "Weak Democrat", "Independent", "Weak Republican", "Republican", "Strong Republican"))
+    ggplot(dat4d, aes(x= party, fill = age)) + geom_bar() + xlab("Political Party") + ylab("Count") + ggtitle("Relationship between age of respondent and political party") + scale_fill_discrete(name = "Age")
+    ```
+    
+      * Based on the output above the age seems to be evenly distributed throughout each political party. There doesn't seem to be a quite official realtionship between age and political party.  
