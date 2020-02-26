@@ -18,6 +18,9 @@ dat$marital = as.factor(dat$marital)
 dat$sex = as.factor(dat$sex)
 dat$party = as.factor(dat$party)
 dat$happiness = as.factor(dat$happiness)
+dat$age = as.factor(dat$age)
+dat$education = as.factor(dat$education)
+dat$income = as.factor(dat$income)
 
 dat1 = dat[dat$marital != "No answer",]
 dat1 = dat1[dat1$happiness == "Not too happy" | dat1$happiness == "Pretty happy" | dat1$happiness == "Very happy",]
@@ -63,7 +66,7 @@ ggplot(dat3, aes(x= party, fill = happiness)) + geom_bar(position = 'dodge') + x
     * What year seems to have the happiest and least happiest respondents?
     * How does the age of the respondent affect happiness?
     * What is the relationship between income and highest year of school completed?
-    ```{r}
+    ```{r, fig.width=17, fig.height=10}
 dat4c<- dat[dat$income != "Don't know" & dat$income != "No answer" & dat$income != "Not applicable" & dat$income != "Refused", ]
 dat4c<- dat4c[dat4c$education != "Don't know" & dat4c$education != "No answer", ]
 
@@ -79,7 +82,20 @@ dat4c <- na.omit(dat4c)
 
 ggplot(dat4c, aes(x= income, fill = education)) + geom_bar() + xlab("Income") + ylab("Count") + ggtitle("Relationship between Education Level and Income") + scale_fill_discrete(name = "Education Level")
     
-    
+    ```
+   Based on the output I think it is safe to say that most respondents have an income of $25,000 or more. The education level of those respondents seem to mostly be around 11-15 so about right in the middle of the education level.  
+   
+    * How does the age of each respondent affect what political party they are in?
+    ```{r, fig.width = 13, fig.height= 10}
+  dat4d<- dat[dat$party != "Don't know" & dat$party != "No answer" & dat$party != "Other party", ]
+dat4d<- dat4d[dat4d$age != "Don't know" & dat4d$age != "No answer", ]
+dat4d <- na.omit(dat4d)
+
+levels(dat4d$party)<- c("Don't know", "Weak Democrat", "Weak Republican", "Independent", "No answer", "Democrat", "Republican", "Other Party", "Strong Democrat", "Strong Republican")
+levels(dat4d$party)
+dat4d$party <- factor(dat4d$party, levels = c("Strong Democrat", "Democrat", "Weak Democrat", "Independent", "Weak Republican", "Republican", "Strong Republican"))
+
+
+ggplot(dat4d, aes(x= party, fill = age)) + geom_bar() + xlab("Political Party") + ylab("Count") + ggtitle("Relationship between age of respondent and political party") + scale_fill_discrete(name = "Education Level")
     
     ```
-    * How does the age of each respondent affect what political party they are in?
